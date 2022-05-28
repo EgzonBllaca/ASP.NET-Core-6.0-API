@@ -22,31 +22,47 @@ namespace ASP.NET_Core_6._0_API.Controllers
 
         // GET: api/Receta
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Receta>>> GetReceta()
+        public async Task<ActionResult> GetReceta()
         {
-          if (_context.Receta == null)
-          {
-              return NotFound();
-          }
-            return await _context.Receta.ToListAsync();
+            try
+            {
+                if (_context.Receta == null)
+                {
+                    return NotFound();
+                }
+                return Ok(await _context.Receta.ToListAsync());
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+                throw;
+            }
         }
 
         // GET: api/Receta/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Receta>> GetReceta(int id)
+        public async Task<ActionResult> GetReceta(int id)
         {
-          if (_context.Receta == null)
-          {
-              return NotFound();
-          }
-            var receta = await _context.Receta.FindAsync(id);
-
-            if (receta == null)
+            try
             {
-                return NotFound();
-            }
+                if (_context.Receta == null)
+                {
+                    return NotFound();
+                }
+                var receta = await _context.Receta.FindAsync(id);
 
-            return receta;
+                if (receta == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(receta);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+                throw;
+            }
         }
 
         // PUT: api/Receta/5
@@ -64,6 +80,7 @@ namespace ASP.NET_Core_6._0_API.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                return Ok("Edited successfully!");
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -73,6 +90,7 @@ namespace ASP.NET_Core_6._0_API.Controllers
                 }
                 else
                 {
+                    return BadRequest();
                     throw;
                 }
             }
@@ -93,6 +111,7 @@ namespace ASP.NET_Core_6._0_API.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                return Ok("Added successfully!");
             }
             catch (DbUpdateException)
             {
@@ -102,11 +121,10 @@ namespace ASP.NET_Core_6._0_API.Controllers
                 }
                 else
                 {
+                    return BadRequest();
                     throw;
                 }
             }
-
-            return CreatedAtAction("GetReceta", new { id = receta.Id }, receta);
         }
 
         // DELETE: api/Receta/5
@@ -123,10 +141,18 @@ namespace ASP.NET_Core_6._0_API.Controllers
                 return NotFound();
             }
 
-            _context.Receta.Remove(receta);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Receta.Remove(receta);
+                await _context.SaveChangesAsync();
 
-            return Ok("Deleted successfully!");
+                return Ok("Deleted successfully!");
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+                throw;
+            }
         }
 
         private bool RecetaExists(int id)

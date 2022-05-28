@@ -23,7 +23,7 @@ namespace ASP.NET_Core_6._0_API.Controllers
 
         // GET: api/Kategoria
         [HttpGet]
-        public async Task<ActionResult<IEnumerable>> GetKategoria()
+        public async Task<ActionResult> GetKategoria()
         {
             try
             {
@@ -31,7 +31,7 @@ namespace ASP.NET_Core_6._0_API.Controllers
                 {
                     return NotFound();
                 }
-                return Ok(await _context.Kategoria.ToList());
+                return Ok( _context.Kategoria.ToList());
             }
             catch (Exception)
             {
@@ -42,7 +42,7 @@ namespace ASP.NET_Core_6._0_API.Controllers
 
         // GET: api/Kategoria/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Kategoria>> GetKategoria(int id)
+        public async Task<ActionResult> GetKategoria(int id)
         {
             try
             {
@@ -100,7 +100,7 @@ namespace ASP.NET_Core_6._0_API.Controllers
         // POST: api/Kategoria
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Kategoria>> PostKategoria(Kategoria kategoria)
+        public async Task<ActionResult> PostKategoria(Kategoria kategoria)
         {
           if (_context.Kategoria == null)
           {
@@ -124,8 +124,6 @@ namespace ASP.NET_Core_6._0_API.Controllers
                     throw;
                 }
             }
-
-            return CreatedAtAction("GetKategoria", new { id = kategoria.Id }, kategoria);
         }
 
         // DELETE: api/Kategoria/5
@@ -145,7 +143,7 @@ namespace ASP.NET_Core_6._0_API.Controllers
             _context.Kategoria.Remove(kategoria);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok("Deleted successfully");
         }
 
         private bool KategoriaExists(int id)

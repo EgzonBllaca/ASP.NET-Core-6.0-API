@@ -22,31 +22,47 @@ namespace ASP.NET_Core_6._0_API.Controllers
 
         // GET: api/Perberesi
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Perberesi>>> GetPerberesis()
+        public async Task<ActionResult> GetPerberesis()
         {
-          if (_context.Perberesis == null)
-          {
-              return NotFound();
-          }
-            return await _context.Perberesis.ToListAsync();
+            try
+            {
+                if (_context.Perberesis == null)
+                {
+                    return NotFound();
+                }
+                return Ok(await _context.Perberesis.ToListAsync());
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+                throw;
+            }
         }
 
         // GET: api/Perberesi/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Perberesi>> GetPerberesi(int id)
+        public async Task<ActionResult> GetPerberesi(int id)
         {
-          if (_context.Perberesis == null)
-          {
-              return NotFound();
-          }
-            var perberesi = await _context.Perberesis.FindAsync(id);
-
-            if (perberesi == null)
+            try
             {
-                return NotFound();
-            }
+                if (_context.Perberesis == null)
+                {
+                    return NotFound();
+                }
+                var perberesi = await _context.Perberesis.FindAsync(id);
 
-            return perberesi;
+                if (perberesi == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(perberesi);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+                throw;
+            }
         }
 
         // PUT: api/Perberesi/5
@@ -64,6 +80,7 @@ namespace ASP.NET_Core_6._0_API.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                return Ok("Edited succesfully!");
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -73,6 +90,7 @@ namespace ASP.NET_Core_6._0_API.Controllers
                 }
                 else
                 {
+                    return BadRequest();
                     throw;
                 }
             }
@@ -83,7 +101,7 @@ namespace ASP.NET_Core_6._0_API.Controllers
         // POST: api/Perberesi
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Perberesi>> PostPerberesi(Perberesi perberesi)
+        public async Task<ActionResult> PostPerberesi(Perberesi perberesi)
         {
           if (_context.Perberesis == null)
           {
@@ -93,6 +111,7 @@ namespace ASP.NET_Core_6._0_API.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                return Ok("Added successfully!");
             }
             catch (DbUpdateException)
             {
@@ -102,11 +121,10 @@ namespace ASP.NET_Core_6._0_API.Controllers
                 }
                 else
                 {
+                    return BadRequest();
                     throw;
                 }
             }
-
-            return CreatedAtAction("GetPerberesi", new { id = perberesi.Id }, perberesi);
         }
 
         // DELETE: api/Perberesi/5
@@ -123,10 +141,17 @@ namespace ASP.NET_Core_6._0_API.Controllers
                 return NotFound();
             }
 
-            _context.Perberesis.Remove(perberesi);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            try
+            {
+                _context.Perberesis.Remove(perberesi);
+                await _context.SaveChangesAsync();
+                return Ok("Deleted succesfully!");
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+                throw;
+            }
         }
 
         private bool PerberesiExists(int id)
