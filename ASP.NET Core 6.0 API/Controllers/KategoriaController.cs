@@ -8,11 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using ASP.NET_Core_6._0_API.Entities;
 using System.Collections;
 using ASP.NET_Core_6._0_API.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ASP.NET_Core_6._0_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
+    [Authorize(Roles = "Admin")]
     public class KategoriaController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -24,6 +27,7 @@ namespace ASP.NET_Core_6._0_API.Controllers
 
         // GET: api/Kategoria
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult> GetKategoria()
         {
             try

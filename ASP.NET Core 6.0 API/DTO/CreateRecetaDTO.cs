@@ -5,7 +5,7 @@
 
         public string? Emri { get; set; }
         public string? Udhezimet { get; set; }
-        public DateTime? Kohezgjatja { get; set; }
+        public int? Kohezgjatja { get; set; }
         public int? Kalorite { get; set; }
         public int? KategoriaId { get; set; }
     }

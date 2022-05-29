@@ -13,7 +13,7 @@ namespace ASP.NET_Core_6._0_API.Entities
         public int Id { get; set; }
         public string? Emri { get; set; }
         public string? Udhezimet { get; set; }
-        public DateTime? Kohezgjatja { get; set; }
+        public int? Kohezgjatja { get; set; }
         public int? Kalorite { get; set; }
         public int? UserId { get; set; }
         public int? KategoriaId { get; set; }

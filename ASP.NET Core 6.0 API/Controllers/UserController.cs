@@ -54,7 +54,7 @@ namespace ASP.NET_Core_6._0_API.Controllers
 
                 try
                 {
-                    await _userManager.AddToRoleAsync(user, model.RoleId == "1" ? "Admin" : "Client");
+                    await _userManager.AddToRoleAsync(user, model.RoleId == "1" ? "Admin" : "Cook");
                 }
                 catch (Exception ex)
                 {
@@ -75,7 +75,7 @@ namespace ASP.NET_Core_6._0_API.Controllers
                 //return RedirectToLocal(returnUrl);
             }
 
-            return BadRequest("Success");
+            return BadRequest("Registering failed!");
 
         }
 

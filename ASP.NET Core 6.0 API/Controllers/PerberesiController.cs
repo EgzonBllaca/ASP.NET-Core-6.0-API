@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ASP.NET_Core_6._0_API.Entities;
 using ASP.NET_Core_6._0_API.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ASP.NET_Core_6._0_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin,Cook")]
     public class PerberesiController : ControllerBase
     {
         private readonly ApplicationDbContext _context;

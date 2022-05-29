@@ -120,7 +120,7 @@ namespace ASP.NET_Core_6._0_API.Entities
 
             modelBuilder.Entity<Kategoria>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id).UseIdentityColumn();
 
                 entity.Property(e => e.Emri).HasMaxLength(50);
             });
@@ -129,7 +129,7 @@ namespace ASP.NET_Core_6._0_API.Entities
             {
                 entity.ToTable("Perberesi");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id).UseIdentityColumn();
 
                 entity.Property(e => e.Emri).HasMaxLength(50);
 
@@ -141,16 +141,16 @@ namespace ASP.NET_Core_6._0_API.Entities
 
             modelBuilder.Entity<Receta>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id).UseIdentityColumn();
 
                 entity.Property(e => e.Emri).HasMaxLength(50);
 
-                entity.Property(e => e.Kohezgjatja).HasColumnType("datetime");
-
+                entity.Property(e => e.Kohezgjatja).HasColumnType("int");
+/*
                 entity.HasOne(d => d.Kategoria)
-                    .WithMany(p => p.Receta)
+                    //.WithMany(p => p.Receta)
                     .HasForeignKey(d => d.KategoriaId)
-                    .HasConstraintName("FK_Receta_KategoriaId");
+                    .HasConstraintName("FK_Receta_KategoriaId");*/
             });
 
             OnModelCreatingPartial(modelBuilder);
