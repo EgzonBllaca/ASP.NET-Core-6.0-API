@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ASP.NET_Core_6._0_API.Entities;
 using System.Collections;
+using ASP.NET_Core_6._0_API.DTO;
 
 namespace ASP.NET_Core_6._0_API.Controllers
 {
@@ -100,12 +101,16 @@ namespace ASP.NET_Core_6._0_API.Controllers
         // POST: api/Kategoria
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult> PostKategoria(Kategoria kategoria)
+        public async Task<ActionResult> PostKategoria(CreateKategoriaDTO model)
         {
           if (_context.Kategoria == null)
           {
               return Problem("Entity set 'ApplicationDbContext.Kategoria'  is null.");
           }
+            var kategoria = new Kategoria
+            {
+                Emri = model.Emri
+            };
             _context.Kategoria.Add(kategoria);
             try
             {

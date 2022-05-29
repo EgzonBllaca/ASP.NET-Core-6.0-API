@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ASP.NET_Core_6._0_API.Entities;
+using ASP.NET_Core_6._0_API.DTO;
 
 namespace ASP.NET_Core_6._0_API.Controllers
 {
@@ -22,7 +23,7 @@ namespace ASP.NET_Core_6._0_API.Controllers
 
         // GET: api/Receta
         [HttpGet]
-        public async Task<ActionResult> GetReceta()
+        public async Task<ActionResult> GetReceta([FromQuery]FilterRecetaDTO? receta = null)
         {
             try
             {
@@ -30,7 +31,21 @@ namespace ASP.NET_Core_6._0_API.Controllers
                 {
                     return NotFound();
                 }
-                return Ok(await _context.Receta.ToListAsync());
+                if (receta==null)
+                {
+                    return Ok(await _context.Receta.ToListAsync());
+                }
+
+                var listaRecetave = await _context.Receta.Include(x => x.Kategoria).Where
+                    (
+                    x => (!String.IsNullOrEmpty(receta.Emri)? x.Emri.Contains(receta.Emri) : true)&&
+                    (!String.IsNullOrEmpty(receta.Udhezimet) ? x.Udhezimet.Contains(receta.Udhezimet) : true) &&
+                    (receta.Kohezgjatja.HasValue ? x.Kohezgjatja==receta.Kohezgjatja : true) &&
+                    (receta.Kalorite.HasValue ? x.Kalorite == receta.Kalorite : true) &&
+                    (receta.Kohezgjatja.HasValue ? x.Kohezgjatja == receta.Kohezgjatja : true) &&
+                    (!String.IsNullOrEmpty(receta.Kategoria) ? x.Kategoria.Emri.Contains(receta.Kategoria) : true)
+                    ).ToListAsync();
+                return Ok(listaRecetave);
             }
             catch (Exception)
             {
@@ -101,12 +116,20 @@ namespace ASP.NET_Core_6._0_API.Controllers
         // POST: api/Receta
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Receta>> PostReceta(Receta receta)
+        public async Task<ActionResult<Receta>> PostReceta(CreateRecetaDTO model)
         {
           if (_context.Receta == null)
           {
               return Problem("Entity set 'ApplicationDbContext.Receta'  is null.");
           }
+            var receta = new Receta
+            {
+                Emri = model.Emri,
+                Udhezimet = model.Udhezimet,
+                Kohezgjatja = model.Kohezgjatja,
+                Kalorite = model.Kalorite,
+                KategoriaId = model.KategoriaId
+            };
             _context.Receta.Add(receta);
             try
             {

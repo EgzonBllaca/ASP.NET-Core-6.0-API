@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ASP.NET_Core_6._0_API.Entities;
+using ASP.NET_Core_6._0_API.DTO;
 
 namespace ASP.NET_Core_6._0_API.Controllers
 {
@@ -101,12 +102,17 @@ namespace ASP.NET_Core_6._0_API.Controllers
         // POST: api/Perberesi
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult> PostPerberesi(Perberesi perberesi)
+        public async Task<ActionResult> PostPerberesi(CreatePerberesiDTO model)
         {
           if (_context.Perberesis == null)
           {
               return Problem("Entity set 'ApplicationDbContext.Perberesis'  is null.");
           }
+            var perberesi = new Perberesi
+            {
+                Emri = model.Emri,
+                RecetaId = model.RecetaId
+            };
             _context.Perberesis.Add(perberesi);
             try
             {
